@@ -37,3 +37,6 @@ The script executes the following pipeline:
 2. Make the script executable:
    ```bash
    chmod +x disk_monitor.sh
+3. Run the script
+    ```
+    bash sys_health.sh
