@@ -37,6 +37,47 @@ The script executes the following pipeline:
 2. Make the script executable:
    ```bash
    chmod +x disk_monitor.sh
-3. Run the script
-    ```
-    bash sys_health.sh
+3. Run the script natively:
+    ```bash
+    ./disk_health
+
+# Secure User Provisioning Utility (`create_user.sh`)
+
+An administrative identity management script built to automate the secure provisioning of local Linux users. It validates execution environments, prevents user namespace account duplication, and enforces immediate password aging policies to maximize baseline OS security.
+
+---
+
+## 🚀 Features
+
+* **Privilege Guardrails:** Enforces root or administrative constraints by checking the effective User ID (`$EUID`), ensuring configuration attempts from standard contexts exit early before breaking.
+* **Account Collision Interception:** Runs an active dynamic loop backed by `getent passwd` that prompts for input until a completely unique username is passed, gracefully avoiding filesystem overwrites.
+* **Automated Password Hardening:** Leverages `openssl` to inject an unpredictable 12-character base64 random password directly to `chpasswd`.
+* **Instant Account Aging:** Pairs creation with immediate password expiration (`chage -d 0`), forcing the newly minted user to change their password on their first SSH or console login session.
+
+---
+
+## 🛠️ How It Works
+
+The script executes the following pipeline:
+1. **Validates** root privileges and ensures a positional runtime argument (`$1`) is supplied.
+2. **Queries** the centralized password databases via `getent passwd` to look up namespace conflicts.
+3. **Creates** the new system account along with its clean home directory infrastructure via `useradd -m`.
+4. **Generates** and pipes a cryptographically random credentials sequence to the target profile.
+5. **Expires** the account status instantly to secure day-one resource handoffs.
+
+---
+
+## 📂 Getting Started
+
+### Prerequisites
+* A Linux environment (WSL2, local VM, or bare metal).
+* Standard `coreutils` utilities and `openssl` package installed.
+
+### Installation & Execution
+1. Clone your project repository or copy the script file.
+2. Make the script executable:
+   ```bash
+   chmod +x create_user.sh
+3. Run the utility with administrative privileges:
+    ```bash
+    sudo ./create_user.sh <username>
